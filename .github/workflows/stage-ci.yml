@@ -1,0 +1,52 @@
+name: Staging CI
+
+on:
+  push:
+      branches:
+        - 'release/*'
+
+env:
+  CODE: "BANK1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: echo make build
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: 
+      name: staging
+      url: 'https://staging-my-app.com'
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo deploy staging
+
+      - name: Set ENV Credentials
+        run: |
+          client_code=AWS_CREDENTIALS_${{env.CODE}}
+          echo "::set-output name=secret::${client_code}"
+        id: data
+
+      - name: Serverless deploy
+        run: |
+          echo name: ${{steps.data.outputs.secret}}
+          secret="${{ secrets[steps.data.outputs.secret] }}"
+          AWS_ACCESS_KEY_ID=$(echo "$secret" | sed -n '1p')
+          AWS_SECRET_ACCESS_KEY=$(echo "$secret" | sed -n '2p')
+          echo "key aws: $AWS_ACCESS_KEY_ID"
+          echo "secret aws: $AWS_SECRET_ACCESS_KEY"
+
+  approved:
+    runs-on: ubuntu-latest
+    environment: 
+      name: staging
+    needs: deploy  
+    steps:
+      - name: Run a one-line script
+        run: |
+          echo Approved

@@ -1,0 +1,39 @@
+name: Create Pull Request - Feature
+
+on:
+  push:
+    branches:
+      - feature/*
+      
+jobs:
+  create-pull-request:
+    name: Pull request feature
+    runs-on: ubuntu-latest
+    steps:
+#      - uses: actions/checkout@v2
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_AUTO_PR }}
+          PULL_REQUEST_BRANCH: "develop"
+          PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }}
+          # PULL_REQUEST_DRAFT: true
+          PULL_REQUEST_REVIEWERS: jcbsfilho
+          PULL_REQUEST_BODY: |
+              ## What does this PR do?
+              ...
+
+              ## Jira ticket number?
+
+              ...
+
+              ## Checklist before merging
+              - [ ] My code follows this project's style guidelines.
+              - [ ] If it is a core feature, I have added thorough tests.
+              - [ ] I made the corresponding changes in the documentation.
+              - [ ] Will this be part of a product update? If yes, please write one phrase about this update.
