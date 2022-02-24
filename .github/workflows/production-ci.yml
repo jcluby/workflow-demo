@@ -43,7 +43,7 @@ jobs:
   approved:
     runs-on: ubuntu-latest
     environment: 
-      name: develop
+      name: production
     needs: deploy
     steps:
       - name: Run a one-line script
