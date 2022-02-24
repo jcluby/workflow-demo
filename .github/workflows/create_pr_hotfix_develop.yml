@@ -1,0 +1,22 @@
+name: Create Pull Request - After Hotfix
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  pull-request-on-release:
+    name: Create Pull Request After Hotfix
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_AUTO_PR }}
+          PULL_REQUEST_BRANCH: "develop"
+          PULL_REQUEST_FROM_BRANCH: "main"
+          PULL_REQUEST_BODY: |
+              # Description
+
+              Merge Hotfix to Develop

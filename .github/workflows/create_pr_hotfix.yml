@@ -1,0 +1,28 @@
+name: Create Pull Request - Hotfix
+
+on:
+  push:
+    branches:
+      - hotfix/*
+
+jobs:
+  pull-request:
+    name: Create Pull Request - Hotfix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_AUTO_PR }}
+          PULL_REQUEST_BRANCH: "main"
+          PULL_REQUEST_REVIEWERS: jcbsfilho
+          PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }} 
+          PULL_REQUEST_BODY: |
+            # 🔥 Hotfix
+            
+            ## Fix
