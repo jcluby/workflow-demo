@@ -3,7 +3,7 @@ name: Create Pull Request - Hotfix
 on:
   push:
     branches:
-      - release/*
+      - hotfix/*
 
 jobs:
   pull-request:
