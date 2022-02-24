@@ -1,7 +1,9 @@
 name: Develop CI
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - develop
 #test
@@ -15,9 +17,10 @@ jobs:
       - name: Run a one-line script
         run: |
           echo make build here! ${{ github.ref_name }}
-          echo "${{ github.ref }}"
+          echo "${{ github.head_ref }}"
 
   deploy:
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     environment: 
       name: develop
