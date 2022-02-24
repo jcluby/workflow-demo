@@ -17,10 +17,10 @@ jobs:
       - name: Run a one-line script
         run: |
           echo make build here! ${{ github.ref_name }}
-          echo "${{ github.base_ref }}"
+          echo "${{ github.head_ref }}"
 
   deploy:
-    if: startsWith(github.base_ref, 'feature/')
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     environment: 
       name: develop
