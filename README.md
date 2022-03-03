@@ -1,3 +1,3 @@
 # Github Actions
 
-Demo workflows git
+Demo workflows git release hotfix
