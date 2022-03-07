@@ -15,7 +15,7 @@ on:
 jobs:
 
   build:
-    if: startsWith(github.head_ref, 'feature/')
+    # if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
@@ -36,7 +36,7 @@ jobs:
     
 
   deploy:
-    if: startsWith(github.head_ref, 'feature/')
+    # if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     environment: 
       name: develop
