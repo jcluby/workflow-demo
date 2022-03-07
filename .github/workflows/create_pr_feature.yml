@@ -10,7 +10,6 @@ jobs:
     name: Pull request feature
     runs-on: ubuntu-latest
     steps:
-#      - uses: actions/checkout@v2
       - name: Extract Branch Name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -33,7 +32,15 @@ jobs:
               ...
 
               ## Checklist before merging
+              ---
               - [ ] My code follows this project's style guidelines.
               - [ ] If it is a core feature, I have added thorough tests.
               - [ ] I made the corresponding changes in the documentation.
-              - [ ] Will this be part of a product update? If yes, please write one phrase about this update.
+              - [ ] Does it fit into the existing architecture?
+              - [ ] Does it follow the standards adopted by the team in the project?
+              - [ ] Is the code in the right place?
+              - [ ] Is there code reuse?
+              - [ ] Is the complexity too high?
+              - [ ] Do the names that were used in variables, fields, parameters, classes and methods reflect what it really represents?
+              - [ ] Only by reading the code is it possible to understand what it does?
+              - [ ] Does the code contain a Bug, a wrong comparison?
