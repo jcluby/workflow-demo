@@ -1,18 +1,24 @@
 name: Develop CI
 
 on:
-  pull_request:
-    types:
-      - closed
-      - opened
+  push:
     branches:
       - develop
+
+# on:
+#   pull_request:
+#     types:
+#       - closed
+#     branches:
+#       - develop
 
 jobs:
 
   build:
     if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
+    outputs:
+      deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
       - name: Export deployment matrix
         id: export-deployment-matrix
@@ -38,7 +44,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        server: ${{ fromJson(steps.export-deployment-matrix.outputs.deployment-matrix) }}
+        server: ${{ fromJson(needs.build.outputs.deployment-matrix) }}
 
     steps:
       - name: "${{ matrix.server.name }}: Prepare deploy"
