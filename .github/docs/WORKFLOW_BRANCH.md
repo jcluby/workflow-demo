@@ -45,7 +45,7 @@ When using the git-flow extension library, executing git flow init on an existin
 
 To start collaborating with the project run the command below.
 
-![feature example](screenshots/features.jpg)
+![feature example](../../screenshots/features.jpg)
 
 *To start the feature*
 
@@ -130,7 +130,7 @@ When using the git-flow extensions:
 
 Maintenance or “hotfix” branches are used to quickly patch production releases. Hotfix branches are a lot like release branches and feature branches except they're based on main instead of develop.
 
-![feature example](screenshots/hotfixes.jpg)
+![feature example](../../screenshots/hotfixes.jpg)
 
 *To start the hotfix*
 
