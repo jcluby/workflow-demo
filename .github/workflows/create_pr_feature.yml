@@ -22,7 +22,7 @@ jobs:
           PULL_REQUEST_BRANCH: "develop"
           PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }}
           # PULL_REQUEST_DRAFT: true
-          PULL_REQUEST_REVIEWERS: jcbsfilho
+          PULL_REQUEST_REVIEWERS: ${{ secrets.REVIEWERS }}
           PULL_REQUEST_BODY: |
               ## What does this PR do?
               ...
