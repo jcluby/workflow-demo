@@ -4,36 +4,50 @@ on:
   pull_request:
     types:
       - closed
+      - opened
     branches:
       - develop
-#test
-env:
-  CODE: "MAIN"
 
 jobs:
+
   build:
     if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     steps:
+      - name: Export deployment matrix
+        id: export-deployment-matrix
+        run: |
+          JSON="$(cat ./deployment-config.json)"
+          JSON="${JSON//'%'/'%25'}"
+          JSON="${JSON//$'\n'/'%0A'}"
+          JSON="${JSON//$'\r'/'%0D'}"
+          echo "::set-output name=deployment-matrix::$JSON"
+          
       - name: Run a one-line script
         run: |
           echo make build here! ${{ github.ref_name }}
           echo "${{ github.head_ref }}"
+    
 
   deploy:
     if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     environment: 
       name: develop
-      url: 'https://develop-my-app.com'
+      url: '${{ matrix.server.url }}'
     needs: build
+    strategy:
+      matrix:
+        server: ${{ fromJson(steps.export-deployment-matrix.outputs.deployment-matrix) }}
+
     steps:
-      - name: Run a one-line script
-        run: echo deploy develop
+      - name: "${{ matrix.server.name }}: Prepare deploy"
+        runs: |
+          echo "${{ matrix.server.name }}"
 
       - name: Set ENV Credentials
         run: |
-          client_code=AWS_CREDENTIALS_${{env.CODE}}
+          client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
           echo "::set-output name=secret::${client_code}"
         id: data
 
