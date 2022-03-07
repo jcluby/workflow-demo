@@ -2,9 +2,9 @@ name: Staging CI
 
 on:
   push:
-      branches:
-        - 'release/*'
-        - 'hotfix/*'
+    branches:
+      - 'release/*'
+      - 'hotfix/*'
 
 env:
   CODE: "BANK1"

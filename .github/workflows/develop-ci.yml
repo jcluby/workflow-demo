@@ -3,7 +3,7 @@ name: Develop CI
 on:
   pull_request:
     types:
-      - closed
+      - opened
     branches:
       - develop
 
