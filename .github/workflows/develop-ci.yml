@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: "${{ matrix.server.name }}: Prepare deploy"
-        runs: |
+        run: |
           echo "${{ matrix.server.name }}"
 
       - name: Set ENV Credentials
