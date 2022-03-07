@@ -21,7 +21,7 @@ jobs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
@@ -52,6 +52,7 @@ jobs:
       - name: "${{ matrix.server.name }}: Prepare deploy"
         run: |
           echo "${{ matrix.server.name }}"
+          echo "${{ matrix.server.url }}"
 
       - name: Set ENV Credentials
         run: |
