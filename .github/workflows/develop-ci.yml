@@ -20,6 +20,8 @@ jobs:
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
