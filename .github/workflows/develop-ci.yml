@@ -73,14 +73,19 @@ jobs:
         run: |
           echo "${{ matrix.server.name }}"
           echo "${{ matrix.server.url }}"
+          client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
+          echo "::set-output name=secret::${client_code}"
+        id: prepare_env
 
       - name: Set ENV Credentials
         run: |
-          secret="${{ secrets['AWS_CREDENTIALS_${{ matrix.server.name }}'] }}"
+          secret="${{ secrets[steps.prepare_env.outputs.secret] }}"
           aws_key=$(echo "$secret" | sed -n '1p')
           aws_secret=$(echo "$secret" | sed -n '2p')
           echo "::set-output name=aws_key::${aws_key}"
           echo "::set-output name=aws_secret::${aws_secret}"
+          echo "key aws: $aws_key"
+          echo "secret aws: $aws_secret"
         id: data_secret
 
       - name: Serverless Deploy
