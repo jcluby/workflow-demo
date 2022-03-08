@@ -69,22 +69,29 @@ jobs:
           echo "secret aws: $aws_secret"
         id: data_secret
 
-      - uses: actions/checkout@v2
+      - name: checkout
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
+        uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
+      - name: cache
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Use Node.js 14.x
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
 
       - name: Install dependencies
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         run: npm install
 
       - name: Create env file
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         run: |
           cat > env.yml << EOF
           ${{ secrets.ENV }}
