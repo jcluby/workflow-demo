@@ -71,7 +71,7 @@ jobs:
       - name: Set ENV Credentials
         run: |
           client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
-          secret="${{ secrets[client_code] }}"
+          secret="${{ secrets[$client_code] }}"
           aws_key=$(echo "$secret" | sed -n '1p')
           aws_secret=$(echo "$secret" | sed -n '2p')
           echo "::set-output name=aws_key::${aws_key}"
