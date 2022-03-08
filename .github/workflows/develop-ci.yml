@@ -91,7 +91,7 @@ jobs:
           cat > env.yml << EOF
           ${{ secrets.ENV }}
           EOF
-          cat > version.json << EOF
+          cat > data_deploy.json << EOF
             { "version": "${{ matrix.server.version }}" }
           EOF
 
