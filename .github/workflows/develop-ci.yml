@@ -91,6 +91,7 @@ jobs:
           EOF
 
       - name: Serverless Deploy
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: serverless/github-action@master
         with:
           args: deploy --stage dev
