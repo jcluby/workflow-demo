@@ -20,22 +20,41 @@ jobs:
       - name: Export deployment matrix
         id: export-deployment-matrix
         run: |
-          JSON="$(cat ./deployment-config.json)"
+          JSON="$(cat ./devops/deployment-config.json)"
           JSON="${JSON//'%'/'%25'}"
           JSON="${JSON//$'\n'/'%0A'}"
           JSON="${JSON//$'\r'/'%0D'}"
           echo "::set-output name=deployment-matrix::$JSON"
-          
+
       - name: Run a one-line script
         run: |
           echo make build here! ${{ github.ref_name }}
           echo "${{ github.head_ref }}"
-    
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create env file
+        run: |
+          cat > env.yml << EOF
+          ${{ secrets.ENV }}
+          EOF
+
 
   deploy:
     if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
-    environment: 
+    environment:
       name: develop
       url: '${{ matrix.server.url }}'
     needs: build
@@ -52,15 +71,17 @@ jobs:
       - name: Set ENV Credentials
         run: |
           client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
-          echo "::set-output name=secret::${client_code}"
-        id: data
+          secret="${{ secrets[client_code] }}"
+          aws_key=$(echo "$secret" | sed -n '1p')
+          aws_secret=$(echo "$secret" | sed -n '2p')
+          echo "::set-output name=aws_key::${aws_key}"
+          echo "::set-output name=aws_secret::${aws_secret}"
+        id: data_secret
 
-      - name: Serverless deploy
-        run: |
-          echo name: ${{steps.data.outputs.secret}}
-          secret="${{ secrets[steps.data.outputs.secret] }}"
-          AWS_ACCESS_KEY_ID=$(echo "$secret" | sed -n '1p')
-          AWS_SECRET_ACCESS_KEY=$(echo "$secret" | sed -n '2p')
-          echo "key aws: $AWS_ACCESS_KEY_ID"
-          echo "secret aws: $AWS_SECRET_ACCESS_KEY"
-                 
+      - name: Serverless Deploy
+        uses: serverless/github-action@master
+        with:
+          args: deploy --stage dev
+        env:
+          AWS_ACCESS_KEY_ID: ${{ steps.data_secret.outputs.aws_key }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.data_secret.outputs.aws_secret }}
