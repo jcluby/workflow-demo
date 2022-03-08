@@ -97,6 +97,9 @@ jobs:
           cat > env.yml << EOF
           ${{ secrets.ENV }}
           EOF
+          cat > .env << EOF
+          VERSION_APP: ${{ matrix.server.version }}
+          EOF
 
       - name: Serverless Deploy
         if: ${{ steps.data_secret.outputs.aws_key != '' }}
@@ -106,4 +109,3 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.data_secret.outputs.aws_key }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.data_secret.outputs.aws_secret }}
-          VERSION_APP: ${{ matrix.server.version }}
