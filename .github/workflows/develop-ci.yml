@@ -1,22 +1,16 @@
 name: Develop CI
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - develop
-
-# on:
-#   pull_request:
-#     types:
-#       - opened
-#       - closed
-#     branches:
-#       - develop
 
 jobs:
 
   build:
-    # if: startsWith(github.head_ref, 'feature/')
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     outputs:
       deployment-matrix: ${{ steps.export-deployment-matrix.outputs.deployment-matrix }}
@@ -39,7 +33,7 @@ jobs:
 
 
   deploy:
-    # if: startsWith(github.head_ref, 'feature/')
+    if: startsWith(github.head_ref, 'feature/')
     runs-on: ubuntu-latest
     environment:
       name: develop
