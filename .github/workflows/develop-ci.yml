@@ -37,25 +37,6 @@ jobs:
           echo make build here! ${{ github.ref_name }}
           echo "${{ github.head_ref }}"
 
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Create env file
-        run: |
-          cat > env.yml << EOF
-          ${{ secrets.ENV }}
-          EOF
-
 
   deploy:
     # if: startsWith(github.head_ref, 'feature/')
@@ -87,6 +68,27 @@ jobs:
           echo "key aws: $aws_key"
           echo "secret aws: $aws_secret"
         id: data_secret
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create env file
+        run: |
+          cat > env.yml << EOF
+          ${{ secrets.ENV }}
+          EOF
 
       - name: Serverless Deploy
         uses: serverless/github-action@master
