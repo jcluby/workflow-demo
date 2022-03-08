@@ -98,7 +98,7 @@ jobs:
           ${{ secrets.ENV }}
           EOF
           cat > version.json << EOF
-            { version: ${{ matrix.server.version }} }
+            { "version": "${{ matrix.server.version }}" }
           EOF
 
       - name: Serverless Deploy
