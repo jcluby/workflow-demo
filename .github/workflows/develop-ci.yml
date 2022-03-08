@@ -54,6 +54,7 @@ jobs:
         run: |
           echo "${{ matrix.server.name }}"
           echo "${{ matrix.server.url }}"
+          echo "${{ matrix.server.version }}""
           client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
           echo "::set-output name=secret::${client_code}"
         id: prepare_env
@@ -105,3 +106,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ steps.data_secret.outputs.aws_key }}
           AWS_SECRET_ACCESS_KEY: ${{ steps.data_secret.outputs.aws_secret }}
+          VERSION_APP: ${{ matrix.server.version }}

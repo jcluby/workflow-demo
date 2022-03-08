@@ -14,6 +14,9 @@ export class CreateUserController {
 
   async handle(request: CreateUserRequest): Promise<HttpResponse> {
     const { userId, login, accountId, name } = request
+    if (process.env.VERSION_APP) {
+      console.log(process.env.VERSION_APP)
+    }
     try {
       const id = await this.createUserUseCase.execute({
         userId,
