@@ -42,7 +42,6 @@ jobs:
     strategy:
       matrix:
         server: ${{ fromJson(needs.build.outputs.deployment-matrix) }}
-
     steps:
       - name: "${{ matrix.server.name }}: Prepare deploy"
         run: |
@@ -62,42 +61,29 @@ jobs:
           echo "::set-output name=aws_secret::${aws_secret}"
         id: data_secret
 
-      - name: Run a one-line script
-        run: |
-          echo make build here! ${{ github.ref_name }}
-          echo "${{ github.head_ref }}"
-
-
-  deploy:
-    if: ${{ needs.build.outputs.data-secret.aws_key != '' }}
-    runs-on: ubuntu-latest
-    environment:
-      name: develop
-      url: 'https://dev.${{ matrix.server.domain }}'
-    needs: build
-    strategy:
-      matrix:
-        server: ${{ fromJson(needs.build.outputs.deployment-matrix) }}
-
-    steps:
       - name: checkout
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: actions/checkout@v2
 
       - name: cache
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Use Node.js 14.x
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
 
       - name: Install dependencies
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         run: npm install
 
       - name: Create env file
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         run: |
           cat > env.yml << EOF
           ${{ secrets.ENV }}
@@ -107,9 +93,10 @@ jobs:
           EOF
 
       - name: Serverless Deploy
+        if: ${{ steps.data_secret.outputs.aws_key != '' }}
         uses: serverless/github-action@master
         with:
           args: deploy --stage dev
         env:
-          AWS_ACCESS_KEY_ID: ${{ needs.build.outputs.data-secret.aws_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ needs.build.outputs.data-secret.aws_secret }}
+          AWS_ACCESS_KEY_ID: ${{ steps.data_secret.outputs.aws_key }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.data_secret.outputs.aws_secret }}

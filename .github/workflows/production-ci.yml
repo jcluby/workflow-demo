@@ -40,7 +40,7 @@ jobs:
       - name: "${{ matrix.server.name }}: Prepare deploy"
         run: |
           echo "${{ matrix.server.name }}"
-          echo "${{ matrix.server.url }}"
+          echo "${{ matrix.server.domain }}"
           echo "${{ matrix.server.version }}"
           client_code=AWS_CREDENTIALS_${{ matrix.server.name }}
           echo "::set-output name=secret::${client_code}"

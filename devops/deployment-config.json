@@ -1,12 +1,12 @@
 [
   {
     "name": "BANK1",
-    "url": "bank1.com",
+    "domain": "bank1.com",
     "version": "1.0.0"
   },
   {
-      "name": "BANK2",
-      "url": "bank2.com",
-      "version": "1.0.1"
+    "name": "BANK2",
+    "domain": "bank2.com",
+    "version": "1.0.1"
   }
 ]
