@@ -1,17 +1,11 @@
 name: Develop CI
 
-
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - develop
-
-# on:
-#   pull_request:
-#     types:
-#       - closed
-#     branches:
-#       - develop
 
 jobs:
 
