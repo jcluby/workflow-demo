@@ -1,13 +1,13 @@
-name: Create Pull Request - After Release
+name: Create Pull Request - Main to Develop
 
 on:
   push:
     branches:
       - main
-      
+
 jobs:
   pull-request-on-release:
-    name: Create Pull Request After Release
+    name: Create Pull Request Main to Develop
     runs-on: ubuntu-latest
     steps:
       - name: pull-request-action
@@ -15,8 +15,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_AUTO_PR }}
           PULL_REQUEST_BRANCH: "develop"
+          PULL_REQUEST_REVIEWERS: ${{ secrets.REVIEWERS }}
           PULL_REQUEST_FROM_BRANCH: "main"
           PULL_REQUEST_BODY: |
               # Description
 
-              Merge Release to Develop
+              Merge Main to Develop

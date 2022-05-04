@@ -20,9 +20,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_AUTO_PR }}
           PULL_REQUEST_BRANCH: "main"
-          PULL_REQUEST_REVIEWERS: jcbsfilho
-          PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }} 
+          PULL_REQUEST_REVIEWERS: ${{ secrets.REVIEWERS }}
+          PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }}
           PULL_REQUEST_BODY: |
             # 🔥 Hotfix
-            
+
             ## Fix
